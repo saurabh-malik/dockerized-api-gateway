@@ -1,0 +1,83 @@
+##############################################################################
+## Standard Profile
+## See custom (environment specific) profiles below
+##############################################################################
+info:
+  component: Zuul API Gateway
+
+server:
+  port: 8081
+
+eureka:
+  instance:
+    securePortEnabled: false
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
+  client:
+    registryFetchIntervalSeconds: 5
+
+security:
+  basic:
+    enabled: false
+
+hystrix:
+  command:
+    default:
+      execution.timeout.enabled: false
+  stream:
+    amqp:
+      enabled: false
+
+zuul:
+  # Disable default mapping (all eureka services are mapped to /<service-name> - we don't want to automatically expose
+  # every service
+  ignored-services: '*'
+
+  routes:
+    # Explicit mapping of our registered cloud services:
+
+    # Project based mappings (all requests are in the context of a specific project)
+    dockerized-microservice:
+      path: /api/demo/*
+      stripPrefix: false
+
+    # Swagger documentation pass throughs for composite services. Add one entry per composite service
+    dockerized-microservice-swagger:
+      path: /swagger/demo
+      serviceId: dockerized-microservice
+      stripPrefix: false
+
+logging:
+  level:
+    com.netflix.discovery.DiscoveryClient: WARN
+#    org.springframework.security: TRACE
+
+management:
+  security:
+    enabled: false
+  health:
+      rabbit:
+        enabled: false
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.session.SessionAutoConfiguration
+      - org.springframework.cloud.security.oauth2.proxy.OAuth2ProxyAutoConfiguration
+
+##############################################################################
+# Custom Profiles
+#
+# Activate with the command line argument --spring.profiles.active=profile,names
+##############################################################################
+
+---
+# Redis is available
+spring:
+  profiles: cloud
+
+hystrix:
+  stream:
+    amqp:
+      enabled: true
