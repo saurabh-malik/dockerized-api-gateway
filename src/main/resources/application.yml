@@ -10,12 +10,10 @@ server:
 
 eureka:
   instance:
-    securePortEnabled: false
-    leaseRenewalIntervalInSeconds: 10
-    metadataMap:
-      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
+    preferIpAddress: true
   client:
-    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://dockerized-eureka-server:8761/eureka/
 
 security:
   basic:
@@ -75,7 +73,7 @@ spring:
 ---
 # Redis is available
 spring:
-  profiles: cloud
+  profiles: docker
 
 hystrix:
   stream:
