@@ -7,6 +7,7 @@ info:
 
 server:
   port: 8081
+  connection-timeout: 200000
 
 eureka:
   instance:
@@ -23,9 +24,17 @@ hystrix:
   command:
     default:
       execution.timeout.enabled: false
+      execution.isolation.semaphore.maxConcurrentRequests: 500
+      execution.isolation.thread.timeoutInMilliseconds: 190000
+    dockerized-microserviceRibbonCommand:
+      execution.isolation.semaphore.maxConcurrentRequests: 500
   stream:
     amqp:
       enabled: false
+
+ribbon:
+  ConnectTimeout: 10000
+  ReadTimeout: 120000
 
 zuul:
   # Disable default mapping (all eureka services are mapped to /<service-name> - we don't want to automatically expose
@@ -73,20 +82,5 @@ spring:
 ---
 # Redis is available
 
-ribbon:
-  ReadTimeout: 30000
-  ConnectTimeout: 30000
-  
 spring:
   profiles: docker
-
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 60000
-  stream:
-    amqp:
-      enabled: true
