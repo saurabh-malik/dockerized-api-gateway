@@ -76,6 +76,12 @@ spring:
   profiles: docker
 
 hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
   stream:
     amqp:
       enabled: true
