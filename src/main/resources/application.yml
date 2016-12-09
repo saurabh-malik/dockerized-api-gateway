@@ -37,7 +37,7 @@ zuul:
 
     # Project based mappings (all requests are in the context of a specific project)
     dockerized-microservice:
-      path: /api/demo/*
+      path: /api/Demo/*
       stripPrefix: false
 
     # Swagger documentation pass throughs for composite services. Add one entry per composite service
