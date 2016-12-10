@@ -11,10 +11,14 @@ server:
 
 eureka:
   instance:
-    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 3
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
   client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+    # Default values comes from org.springframework.cloud.netflix.eurek.EurekaClientConfigBean
+    registryFetchIntervalSeconds: 5
+    instanceInfoReplicationIntervalSeconds: 5
+    initialInstanceInfoReplicationIntervalSeconds: 5
 
 security:
   basic:
@@ -82,5 +86,27 @@ spring:
 ---
 # Redis is available
 
+# For deployment in Docker containers
 spring:
   profiles: docker
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
+
+---
+# For deployment in Docker containers
+spring:
+  profiles: local
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+
