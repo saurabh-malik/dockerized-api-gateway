@@ -83,4 +83,4 @@ spring:
 # Redis is available
 
 spring:
-  profiles: docker
+  profiles: cloud
