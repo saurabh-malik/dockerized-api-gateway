@@ -95,7 +95,7 @@ eureka:
     preferIpAddress: true
   client:
     serviceUrl:
-      defaultZone: http://discovery:8761/eureka/
+      defaultZone: http://dockerized-eureka-server:8761/eureka/
 
 ---
 # For deployment in Docker containers
