@@ -14,7 +14,7 @@ eureka:
     preferIpAddress: true
   client:
     serviceUrl:
-      defaultZone: http://dockerized-eureka-server:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
 
 security:
   basic:
