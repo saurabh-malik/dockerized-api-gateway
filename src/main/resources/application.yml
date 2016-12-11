@@ -11,14 +11,19 @@ server:
 
 eureka:
   instance:
-    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 3
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
   client:
-    serviceUrl:
-      defaultZone: http://dockerized-eureka-server:8761/eureka/
+    # Default values comes from org.springframework.cloud.netflix.eurek.EurekaClientConfigBean
+    registryFetchIntervalSeconds: 5
+    instanceInfoReplicationIntervalSeconds: 5
+    initialInstanceInfoReplicationIntervalSeconds: 5
 
 security:
   basic:
     enabled: false
+
 
 hystrix:
   command:
@@ -72,6 +77,8 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.session.SessionAutoConfiguration
       - org.springframework.cloud.security.oauth2.proxy.OAuth2ProxyAutoConfiguration
+  profiles:
+    active: docker
 
 ##############################################################################
 # Custom Profiles
@@ -82,5 +89,26 @@ spring:
 ---
 # Redis is available
 
+# For deployment in Docker containers
 spring:
-  profiles: cloud
+  profiles: docker
+
+eureka:
+  instance:
+    preferIpAddress: true
+    hostName: dockerized-eureka-server
+  client:
+    serviceUrl:
+      defaultZone: http://dockerized-eureka-server:8761/eureka/
+
+---
+# For deployment in Docker containers
+spring:
+  profiles: local
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
