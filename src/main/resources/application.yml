@@ -24,6 +24,7 @@ security:
   basic:
     enabled: false
 
+
 hystrix:
   command:
     default:
@@ -76,6 +77,8 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.session.SessionAutoConfiguration
       - org.springframework.cloud.security.oauth2.proxy.OAuth2ProxyAutoConfiguration
+  profiles:
+    active: docker
 
 ##############################################################################
 # Custom Profiles
@@ -93,6 +96,7 @@ spring:
 eureka:
   instance:
     preferIpAddress: true
+    hostName: dockerized-eureka-server
   client:
     serviceUrl:
       defaultZone: http://dockerized-eureka-server:8761/eureka/
@@ -108,5 +112,7 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+
 
 
